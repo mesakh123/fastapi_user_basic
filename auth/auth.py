@@ -1,7 +1,7 @@
 
 
 from fastapi_users.authentication import AuthenticationBackend, BearerTransport, JWTStrategy
-from ..config.database import SECRET
+from config.base import SECRET
 
 
 bearer_transport = BearerTransport(tokenUrl="auth/jwt/login")

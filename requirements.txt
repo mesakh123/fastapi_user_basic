@@ -3,3 +3,5 @@ fastapi
 fastapi-users[sqlalchemy2]
 uvicorn[standard]
 aiosqlite
+asyncpg
+psycopg2

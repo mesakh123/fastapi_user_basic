@@ -1,24 +1,38 @@
 from fastapi import APIRouter
 from fastapi_users import FastAPIUsers
-from fastapi_users.db import SQLAlchemyUserDatabase
-
-
-from models.usermodel import UserTable
+from config.userconfig import UserManager
 from schemas.user import User, UserCreate, UserUpdate, UserDB
-from auth.auth import jwt_authentication
-from config.database import database
-
+from auth import auth_backend
 
 router = APIRouter()
 
-users = UserTable.__table__
-user_db = SQLAlchemyUserDatabase(UserDB, database, users)
 
 fastapi_users = FastAPIUsers(
-    user_db,
-    [jwt_authentication],
+    UserManager,
+    [auth_backend],
     User,
     UserCreate,
     UserUpdate,
     UserDB,
+)
+
+current_active_user = fastapi_users.current_user(active=True)
+
+
+router.include_router(
+    fastapi_users.get_auth_router(auth_backend), prefix="/auth/jwt", tags=["auth"]
+)
+router.include_router(fastapi_users.get_users_router(),
+                      prefix="/users", tags=["users"])
+router.include_router(fastapi_users.get_register_router(),
+                      prefix="/auth", tags=["auth"])
+router.include_router(
+    fastapi_users.get_reset_password_router(),
+    prefix="/auth",
+    tags=["auth"],
+)
+router.include_router(
+    fastapi_users.get_verify_router(),
+    prefix="/auth",
+    tags=["auth"],
 )

@@ -1,6 +1,6 @@
 
 from fastapi_users.db import SQLAlchemyBaseUserTable
-from config.database import Base
+from config.base import Base
 
 
 class UserTable(Base, SQLAlchemyBaseUserTable):
