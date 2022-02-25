@@ -13,6 +13,7 @@ from models.usermodel import UserTable
 from schemas.user import UserDB
 
 from .base import Base, DATABASE_URL, engine
+from .userconfig import UserManager
 
 database = databases.Database(DATABASE_URL)
 
@@ -33,4 +34,8 @@ async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
 
 async def get_user_db(session: AsyncSession = Depends(get_async_session)):
     # yield SQLAlchemyUserDatabase(UserDB, database, UserTable)
-    yield SQLAlchemyUserDatabase(UserDB, session, UserTable.__table__)
+    yield SQLAlchemyUserDatabase(UserDB, session, UserTable)
+
+
+async def get_user_manager(user_db: SQLAlchemyUserDatabase = Depends(get_user_db)):
+    yield UserManager(user_db)

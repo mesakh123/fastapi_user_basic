@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from fastapi_users import FastAPIUsers
-from config.userconfig import UserManager
+from config.database import get_user_manager
 from schemas.user import User, UserCreate, UserUpdate, UserDB
 from auth import auth_backend
 
@@ -8,7 +8,7 @@ router = APIRouter()
 
 
 fastapi_users = FastAPIUsers(
-    UserManager,
+    get_user_manager,
     [auth_backend],
     User,
     UserCreate,
